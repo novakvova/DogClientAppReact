@@ -1,12 +1,16 @@
 import React from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 import './App.css';
+
+import EclipseWidget from './components/eclipse';
 
 
 class App extends React.Component {
   state = { 
-    dogs: []
+    dogs: [],
+    loading: false
    }
 
   getListDataHandler = (e) => {
@@ -17,15 +21,18 @@ class App extends React.Component {
     // ];
     // this.setState({dogs: list});
     const url='https://localhost:44301/api/dogs';
+    this.setState({loading: true});
     axios.get(url).then(
       (resp) => { 
         console.log('-----axios res-----', resp);
-        this.setState({dogs: resp.data});
+        this.setState({dogs: resp.data, loading: false});
       }
     );
     console.log("------click button-------");
   }
   render() {
+
+    const {loading}= this.state;
     console.log("--Reander app state--", this.state);
 
     const todoItems = this.state.dogs.map((dog) =>
@@ -36,15 +43,21 @@ class App extends React.Component {
       </div>
     );
     return ( 
-      <div className="container">
+      <React.Fragment>
+        
+      { loading && <EclipseWidget /> }
 
-        <h1>Hello Peter</h1>
-        <button className="btn btn-success" onClick={this.getListDataHandler}>Get data</button>
-        <hr className="mt-2 mb-5" />
-        <div className="row text-center text-lg-left" style={{ overflow: "hidden"}}>
+        <div className="container">
+
+          <h1>Hello Peter</h1>
+          <button className="btn btn-success" onClick={this.getListDataHandler}>Get data</button>
+          <hr className="mt-2 mb-5" />
+          <div className="row text-center text-lg-left" style={{ overflow: "hidden" }}>
             {todoItems}
+          </div>
         </div>
-      </div>
+      
+      </React.Fragment>
     );
   }
 }
