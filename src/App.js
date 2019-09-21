@@ -29,19 +29,23 @@ class App extends React.Component {
     console.log("--Reander app state--", this.state);
 
     const todoItems = this.state.dogs.map((dog) =>
-      <li key={dog.id}>
-        {dog.name}
-      </li>
+      <div key={dog.id} className="col-lg-3 col-md-4 col-6">
+        <div className="mb-4 h-100 cursor-pointer">
+          <img className="img-fluid img-thumbnail" src={dog.image} alt="" />
+        </div>
+      </div>
     );
     return ( 
       <div className="container">
+
         <h1>Hello Peter</h1>
-        <button onClick={this.getListDataHandler}>Get data</button>
-        <ul>
-          {todoItems}
-        </ul>
+        <button className="btn btn-success" onClick={this.getListDataHandler}>Get data</button>
+        <hr className="mt-2 mb-5" />
+        <div className="row text-center text-lg-left" style={{ overflow: "hidden"}}>
+            {todoItems}
+        </div>
       </div>
-     );
+    );
   }
 }
  
