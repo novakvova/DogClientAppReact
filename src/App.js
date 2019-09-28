@@ -3,6 +3,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './App.css';
+import DogAddPage from './components/dog-add';
 
 import EclipseWidget from './components/eclipse';
 
@@ -10,8 +11,22 @@ import EclipseWidget from './components/eclipse';
 class App extends React.Component {
   state = { 
     dogs: [],
-    loading: false
-   }
+    loading: false,
+    breedsSelect: []
+  }
+
+  //Подія коли компонент відрендерився посилаємо запит на сервер за даним які необхідні компоненту
+  componentDidMount() {
+    const urlBreeds='https://localhost:44301/api/breeds/select';
+    this.setState({loading: true});
+    axios.get(urlBreeds).then(
+      (resp) => { 
+        console.log('-----axios res-----', resp);
+        this.setState({breedsSelect: resp.data, loading: false});
+      }
+    );
+    //console.log("------click button-------");
+  }
 
   getListDataHandler = (e) => {
     e.preventDefault();
@@ -20,19 +35,19 @@ class App extends React.Component {
     //   {id: 2, name: 'Бім', image: 'https://images.ua.prom.st/1605725118_w640_h640_kopilka-sobaka-sharik.jpg'}
     // ];
     // this.setState({dogs: list});
-    const url='https://localhost:44301/api/dogs';
+    const urlDogs='https://localhost:44301/api/dogs';
     this.setState({loading: true});
-    axios.get(url).then(
+    axios.get(urlDogs).then(
       (resp) => { 
         console.log('-----axios res-----', resp);
         this.setState({dogs: resp.data, loading: false});
       }
     );
-    console.log("------click button-------");
+    
   }
   render() {
 
-    const {loading}= this.state;
+    const {loading, breedsSelect}= this.state;
     console.log("--Reander app state--", this.state);
 
     const todoItems = this.state.dogs.map((dog) =>
@@ -56,7 +71,8 @@ class App extends React.Component {
             {todoItems}
           </div>
         </div>
-      
+        
+        <DogAddPage breeds={breedsSelect} />
       </React.Fragment>
     );
   }
