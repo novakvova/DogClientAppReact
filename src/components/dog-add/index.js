@@ -19,9 +19,11 @@ class DogAddPage extends Component {
     addDogSubmitForm=(e) =>
     {
         e.preventDefault();
-        const urlAddDog='https://localhost:44301/api/dog/create';
+        const {breed} = this.state;
+        const urlAddDog='https://localhost:44301/api/dogs/create';
         this.setState({loading: true});
-        axios.post(urlAddDog).then(
+        const model = {breedId: breed};
+        axios.post(urlAddDog, model).then(
             (resp) => { 
                 console.log('-----axios res add dog-----', resp);
                 this.setState({breed: '', loading: false});
@@ -33,13 +35,16 @@ class DogAddPage extends Component {
     render() {
         console.log('---this props dog-add----', this.props);
         console.log('----add dog state----', this.state);
-        const { breeds } = this.state;
+        const { breeds, loading } = this.state;
         const options = breeds.map(t =>
             <option key={t.id} value={t.id}>{t.name}</option>
         );
 
         return (
             <React.Fragment>
+
+                { loading && <EclipseWidget /> }
+                
                 <div className="container">
                     <form onSubmit={this.addDogSubmitForm}>
                         <h1>Add new Dog</h1>
