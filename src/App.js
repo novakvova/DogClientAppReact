@@ -46,7 +46,7 @@ class App extends React.Component {
     
   }
   render() {
-
+    //Дестурктуризація
     const {loading, breedsSelect}= this.state;
     console.log("--Reander app state--", this.state);
 
